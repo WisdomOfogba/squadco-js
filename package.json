@@ -1,0 +1,52 @@
+{
+  "name": "squadco-js",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "A fast and fully typed Node.js Wrapper for the Squad.co Payment Gateway API",
+  "keywords": [
+    "Payment",
+    "Payment Gateway API",
+    "Ecommerce"
+  ],
+  "homepage": "https://github.com/chibx/squadco-js#readme",
+  "bugs": {
+    "url": "https://github.com/chibx/squadco-js/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chibx/squadco-js.git"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Chibx",
+    "email": "chiebidoluc@gmail.com",
+    "url": "https://chibx.vercel.app"
+  },
+  "main": "./dist/cjs/index.cjs",
+  "module": "./dist/esm/index.mjs",
+  "scripts": {
+    "start": "tsx ./src/index.ts",
+    "test": "vitest",
+    "build": "cross-env NODE_ENV=production tsx ./scripts/pre-publish.ts && tsc --declaration ./src/index.ts --emitDeclarationOnly --outDir ./dist --noCheck",
+    "prepublishOnly": "tsx ./scripts/pre-publish.ts && tsc --declaration ./src/index.ts --emitDeclarationOnly --outDir ./dist --noCheck"
+  },
+  "exports": {
+    "types": "./dist/index.d.ts",
+    "import": "./dist/esm/index.mjs",
+    "require": "./dist/cjs/index.cjs"
+  },
+  "files": [
+    "./dist"
+  ],
+  "dependencies": {
+    "ofetch": "^1.4.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.4",
+    "cross-env": "^7.0.3",
+    "esbuild": "^0.25.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3",
+    "vitest": "^3.0.5"
+  }
+}

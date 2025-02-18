@@ -1,0 +1,15 @@
+{
+	"compilerOptions": {
+		"target": "es2018",
+		"module": "ESNext",
+		"lib": ["es2016"],
+		"allowSyntheticDefaultImports": true,
+		"esModuleInterop": true,
+		"moduleResolution": "node",
+
+		"outDir": "./dist",
+		"rootDir": "./",
+
+		"strict": true
+	}
+}

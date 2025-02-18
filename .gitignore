@@ -1,0 +1,16 @@
+/node_modules/
+/.nyc_output/
+/coverage/
+.DS_Store
+npm-debug.log
+/dist/
+/.idea/
+.vscode
+
+# dotenv environment variable files
+
+.env
+.env.development.local
+.env.test.local
+.env.production.local
+.env.local
