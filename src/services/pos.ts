@@ -24,7 +24,8 @@ export class SquadPos {
         options.date_to = formatDate(options.date_to)
 
         const response = await callWithHeader<GetTerminalsReturn>(this.options.secretKey, 'softpos/terminals', {
-            query: { ...options, active: options.active ? "True" : "False" }
+            // query: { ...options, active: options.active ? "True" : "False" }
+            query: options
         })
 
         checkSquadForError(response)
