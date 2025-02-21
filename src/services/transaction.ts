@@ -1,7 +1,7 @@
 import { destr } from 'destr'
 
 import { SquadOptions } from "../types/pos";
-import { CardChargeOptions, CardChargeReturn, GetAllTransactionsOption, GetAllTransactionsReturn, InitializePaymentError, InitializePaymentOptions, InitializePaymentReturn, InitializePaymentSuccess } from "../types/transaction";
+import { CardChargeOptions, CardChargeReturn, GetAllTransactionsOption, GetAllTransactionsReturn, InitializeDebitPayOptions, InitializeDebitPayReturn, InitializePaymentError, InitializePaymentOptions, InitializePaymentReturn, InitializePaymentSuccess } from "../types/transaction";
 import { callWithHeader, checkSquadForError, formatDate, SquadError } from "../utils";
 
 export class SquadTransaction {
@@ -10,7 +10,7 @@ export class SquadTransaction {
         this.options = options
     }
 
-    async changeCard(options: CardChargeOptions) {
+    async chargeCard(options: CardChargeOptions) {
 
         const response = await callWithHeader<CardChargeReturn>(this.options.secretKey, 'transaction/charge_card', {
             method: "POST",
@@ -38,14 +38,27 @@ export class SquadTransaction {
 
     }
 
+    /** This endpoint allows you to initiate the direct debit of a GTBank account by passing the account number.\
+     *  After initiating the request using this endpoint you are then to call the validate endpoint to complete the transaction. */
+    async initializeDebitPay(options: InitializeDebitPayOptions) {
+        const response = await callWithHeader<InitializeDebitPayReturn>(this.options.secretKey, 'transaction/initiate/process-payment', {
+            method: "POST",
+            body: options,
+        })
+
+        checkSquadForError(response)
+
+        return response
+    }
+
     async initializePayment(options: InitializePaymentOptions) {
-        const pass_charge = options.pass_charge !== undefined
-            ? (options.pass_charge ? 'True' : 'False')
-            : undefined
+        // const pass_charge = options.pass_charge !== undefined
+        //     ? (options.pass_charge ? 'True' : 'False')
+        //     : undefined
 
         const response = await callWithHeader<InitializePaymentReturn>(this.options.secretKey, 'transaction/initiate', {
             method: "POST",
-            body: { ...options, pass_charge },
+            body: options,
         })
 
 

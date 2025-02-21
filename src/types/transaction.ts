@@ -142,3 +142,51 @@ export type GetAllTransactionsReturn = SharedSquadReturn<{
     /** 2024-02-21T13:16:43.012+00:00 */
     created_at: string
 }>
+
+export type InitializeDebitPayOptions = {
+    transaction_reference: string,
+    /** The amount in kobo you are debiting customer (expressed in the lowest currency value - kobo).\
+     *  E.g 10000 = 100NGN  */
+    amount: number
+    /** The currency you want the amount to be charged in. Allowed value is NGN */
+    currency?: "NGN"
+
+    bank: {
+        /** Unique NIP code that identifies a bank. */
+        bank_code: string,
+        /** The GTBank account number to be debitted */
+        account_or_phoneno: string
+    }
+
+    // /** Unique NIP code that identifies a bank. */
+    // bank_code: string
+
+    // /** The GTBank account number to be debitted */
+    // account_or_phoneno: string
+
+    /** Method of payment **(should use "bank")** */
+    payment_method: "bank"
+
+    /** Allows you define where webhook notification is sent\
+     * ___(Where none is presented, the default webhook for merchant is notified)___ */
+    webhook_url?: string
+
+    /** It is set to False by default. When set to True, the charges on the transaction is computed and passed on to the customer(payer).\
+        But when set to False, the charge is passed to the merchant and will be deducted from the amount to be settled to the merchant. */
+    pass_charge: boolean
+
+    customer: {
+        name: string,
+        email: string
+    }
+}
+
+export type InitializeDebitPayReturn = SharedSquadReturn<{
+    amount: number,
+    message: string,
+    transaction_ref: string,
+    transaction_type: string,
+    gateway_ref: string,
+    merchant_amount: number,
+    auth_model: string
+}>
