@@ -190,3 +190,22 @@ export type InitializeDebitPayReturn = SharedSquadReturn<{
     merchant_amount: number,
     auth_model: string
 }>
+
+export type ValidatePaymentOptions = {
+    /** Transaction Refrence from the initiated payment */
+    transaction_reference: string
+    authorizaion: {
+        /** Unique OTP or Token sent to customer, required for transaction completion */
+        otp_token: string
+    }
+}
+
+export type ValidatePaymentReturn = SharedSquadReturn<{
+    amount: 56800,
+    message: string
+    transaction_ref: string,
+    transaction_type: string,
+    gateway_ref: string,
+    merchant_amount: number,
+    auth_model: "ValidateTOKEN" | "ValidateOTP",
+}>
