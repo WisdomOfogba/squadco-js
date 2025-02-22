@@ -44,7 +44,36 @@ export class SquadTransaction {
     }
 
     /** This endpoint allows you to initiate the direct debit of a GTBank account by passing the account number.\
-     *  After initiating the request using this endpoint you are then to call the validate endpoint to complete the transaction. */
+     *  After initiating the request using this endpoint you are then to call the validate endpoint to complete the transaction.\
+     *  
+     *  **Below is quick reference for bank codes supported**
+     * 
+     * | BANK                     | BANK CODE |
+     * | :---                            |      ---: |
+     * | Access (Diamond)                | 063 |
+    *  | Access                          | 044 |
+    *  | Ecobank                         | 050 |
+    *  | FCMB                            | 214 |
+    *  | Fidelity Bank                   | 070 |
+    *  | First Bank                      | 011 |
+    *  | Guaranty Trust Bank             | 058 |
+    *  | Heritage Bank                   | 030 |
+    *  | Keystone Bank                   | 082 |
+    *  | Rubies (Highstreet) MFB         | 125 |
+    *  | Stanbic Bank                    | 221 |
+    *  | Sterling Bank                   | 232 |
+    *  | UBA                             | 033 |
+    *  | Union Bank                      | 032 |
+    *  | Unity Bank                      | 215 |
+    *  | VFD Bank                        | 566 |
+    *  | Wema Bank                       | 035 |
+    *  | Zenith Bank                     | 057 |
+    *  | Globus bank                     | 00103 |
+    *  | Premium Trust Bank              | 105 |
+    *  | LOTUS bank                      | 303 |
+    *  | Optimum Trust Bank              | 107 |
+    *  | Kuda MFB                        | 50211 |
+     */
     async initializeDebitPay(options: InitializeDebitPayOptions) {
         const response = await callWithHeader<InitializeDebitPayReturn>(this.options.secretKey, 'transaction/initiate/process-payment', {
             method: "POST",
@@ -88,6 +117,7 @@ export class SquadTransaction {
 
         return response
     }
+
 }
 
 /** Function to handle the unique return values of the **SquadTransaction.prototype.initializePayment** method */
