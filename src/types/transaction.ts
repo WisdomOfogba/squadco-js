@@ -60,7 +60,7 @@ export type InitializePaymentSuccess = SharedSquadReturn<{
         type: number,
         plan_code: unknown,
         customer_name: string | null
-    },
+    } | null,
     is_recurring: boolean,
     plan_code: unknown,
     callback_url: string,
@@ -208,4 +208,22 @@ export type ValidatePaymentReturn = SharedSquadReturn<{
     gateway_ref: string,
     merchant_amount: number,
     auth_model: "ValidateTOKEN" | "ValidateOTP",
+}>
+
+export type VerifyTransactionRefurn = SharedSquadReturn<{
+    transaction_amount: number,
+    transaction_ref: string,
+    email: string,
+    transaction_status: "Success" | "failed",
+    /** Usually "NGN" */
+    transaction_currency_id: string,
+    /** E.g "2004-01-21T04:30:20" */
+    created_at: string,
+    transaction_type: string,
+    merchant_name: string,
+    merchant_business_name: string | null,
+    gateway_transaction_ref: string,
+    recurring: unknown,
+    merchant_email: string,
+    plan_code: unknown
 }>

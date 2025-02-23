@@ -1,7 +1,7 @@
 import { destr } from 'destr'
 
 import { SquadOptions } from "../types/pos";
-import { CardChargeOptions, CardChargeReturn, GetAllTransactionsOption, GetAllTransactionsReturn, InitializeDebitPayOptions, InitializeDebitPayReturn, InitializePaymentError, InitializePaymentOptions, InitializePaymentReturn, InitializePaymentSuccess, ValidatePaymentOptions, ValidatePaymentReturn } from "../types/transaction";
+import { CardChargeOptions, CardChargeReturn, GetAllTransactionsOption, GetAllTransactionsReturn, InitializeDebitPayOptions, InitializeDebitPayReturn, InitializePaymentError, InitializePaymentOptions, InitializePaymentReturn, InitializePaymentSuccess, ValidatePaymentOptions, ValidatePaymentReturn, VerifyTransactionRefurn } from "../types/transaction";
 import { callWithHeader, checkSquadForError, formatDate, SquadError } from "../utils";
 
 export class SquadTransaction {
@@ -118,6 +118,16 @@ export class SquadTransaction {
         return response
     }
 
+    /** This method allows you to query the status of a particular transaction using the unique transaction reference attached to the transaction. 
+     *  @param reference Unique transaction reference that identifies each transaction
+    */
+    async verifyTransaction(reference: string) {
+        const response = await callWithHeader<VerifyTransactionRefurn>(this.options.secretKey, `transaction/verify/${reference}`)
+
+        checkSquadForError(response)
+
+        return response
+    }
 }
 
 /** Function to handle the unique return values of the **SquadTransaction.prototype.initializePayment** method */
