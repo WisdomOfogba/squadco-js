@@ -1,7 +1,7 @@
 import { destr } from 'destr'
 
-import { SquadOptions } from "../types/pos";
-import { CardChargeOptions, CardChargeReturn, GetAllTransactionsOption, GetAllTransactionsReturn, InitializeDebitPayOptions, InitializeDebitPayReturn, InitializePaymentError, InitializePaymentOptions, InitializePaymentReturn, InitializePaymentSuccess, RefundOptions, RefundReturn, ValidatePaymentOptions, ValidatePaymentReturn, VerifyTransactionRefurn } from "../types/transaction";
+import { SquadOptions } from "../types/services/pos";
+import { CardChargeOptions, CardChargeReturn, GetAllTransactionsOption, GetAllTransactionsReturn, InitializeDebitPayOptions, InitializeDebitPayReturn, InitializePaymentError, InitializePaymentOptions, InitializePaymentReturn, InitializePaymentSuccess, RefundOptions, RefundReturn, ValidatePaymentOptions, ValidatePaymentReturn, VerifyTransactionRefurn } from "../types/services/transaction";
 import { callWithHeader, checkSquadForError, formatDate, SquadError } from "../utils";
 
 export class SquadTransaction {

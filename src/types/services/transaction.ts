@@ -1,4 +1,4 @@
-import { SharedSquadReturn } from "./shared"
+import { SharedSquadReturn } from ".."
 
 export type InitializePaymentOptions = {
     /** Customer's email address. */
