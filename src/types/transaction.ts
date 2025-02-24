@@ -227,3 +227,25 @@ export type VerifyTransactionRefurn = SharedSquadReturn<{
     merchant_email: string,
     plan_code: unknown
 }>
+
+export type RefundOptions = {
+    /** Unique reference that uniquely identifies the medium of payment and can be obtained from  the webhook notification sent to you. */
+    gateway_transaction_ref: string
+    /** Unique reference that identifies a transaction.\
+        Can be obtained from the dashboard or the webhook notification sent to you */
+    transaction_ref: string
+    /** The value of this parameter is either "Full" or "Partial" */
+    refund_type: "Full" | "Partial"
+    reason_for_refund: string
+    /** Refund amount is in kobo or cent.
+     * 
+     * __This is only required for "Partial" refunds__ */
+    refund_amount?: string
+}
+
+
+export type RefundReturn = SharedSquadReturn<{
+    gateway_refund_status: string,
+    refund_status: number,
+    refund_reference: string
+}>

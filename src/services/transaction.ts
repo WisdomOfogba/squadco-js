@@ -1,7 +1,7 @@
 import { destr } from 'destr'
 
 import { SquadOptions } from "../types/pos";
-import { CardChargeOptions, CardChargeReturn, GetAllTransactionsOption, GetAllTransactionsReturn, InitializeDebitPayOptions, InitializeDebitPayReturn, InitializePaymentError, InitializePaymentOptions, InitializePaymentReturn, InitializePaymentSuccess, ValidatePaymentOptions, ValidatePaymentReturn, VerifyTransactionRefurn } from "../types/transaction";
+import { CardChargeOptions, CardChargeReturn, GetAllTransactionsOption, GetAllTransactionsReturn, InitializeDebitPayOptions, InitializeDebitPayReturn, InitializePaymentError, InitializePaymentOptions, InitializePaymentReturn, InitializePaymentSuccess, RefundOptions, RefundReturn, ValidatePaymentOptions, ValidatePaymentReturn, VerifyTransactionRefurn } from "../types/transaction";
 import { callWithHeader, checkSquadForError, formatDate, SquadError } from "../utils";
 
 export class SquadTransaction {
@@ -99,6 +99,22 @@ export class SquadTransaction {
         const result = handleInitializeError(response)
 
         return result
+    }
+
+    /**
+     * Initiate refund process on a __successful__ transaction.
+     * 
+     * Read more: https://squadinc.gitbook.io/squad-api-documentation/refund-api
+     */
+    async refund(options: RefundOptions) {
+        const response = await callWithHeader<RefundReturn>(this.options.secretKey, 'transaction/refund', {
+            method: "POST",
+            body: options,
+        })
+
+        checkSquadForError(response)
+
+        return response
     }
 
     /** Once a payment is initiated using the Direct Bank API, the transaction must be authenticated. This is done using this endpoint to receive details from the user.\
