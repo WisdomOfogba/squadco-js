@@ -1,4 +1,5 @@
-import { AccountLookupOptions, AccountLookupReturn, PayoutTransferOptions } from "../types/services/payout";
+import nip from "../nip";
+import { AccountLookupOptions, AccountLookupReturn, PayoutTransferOptions, PayoutTransferReturn, RequeryReturn } from "../types/services/payout";
 import { SquadOptions } from "../types/services/pos";
 import { callWithHeader, checkSquadForError } from "../utils";
 
@@ -47,9 +48,20 @@ export class SquadPayout {
        412 ---- reversed
      */
     async transfer(options: PayoutTransferOptions) {
-        const response = await callWithHeader<AccountLookupReturn>(this.options.secretKey, 'payout/transfer', {
+        const response = await callWithHeader<PayoutTransferReturn>(this.options.secretKey, 'payout/transfer', {
             method: "POST",
             body: options,
+        })
+
+        checkSquadForError(response)
+
+        return response
+    }
+
+    async requery(transaction_ref: string) {
+        const response = await callWithHeader<RequeryReturn>(this.options.secretKey, 'payout/requery', {
+            method: "POST",
+            body: { transaction_ref },
         })
 
         checkSquadForError(response)

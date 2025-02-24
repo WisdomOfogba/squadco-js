@@ -41,3 +41,14 @@ export type PayoutTransferReturn = SharedSquadReturn<{
     account_name: string,
     destination_institution_name: string
 }>
+
+export type RequeryReturn = SharedSquadReturn<{
+    transaction_reference: string,
+    response_description: string,
+    currency_id: "NGN",
+    amount: string,
+    nip_transaction_reference: string,
+    account_number: string,
+    account_name: string,
+    destination_institution_name: string
+}>
