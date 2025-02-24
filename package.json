@@ -27,7 +27,7 @@
   "scripts": {
     "start": "tsx ./src/index.ts",
     "test": "vitest",
-    "build": "cross-env NODE_ENV=production tsx ./scripts/pre-publish.ts && tsc --declaration ./src/index.ts --emitDeclarationOnly --outDir ./dist --noCheck",
+    "build": "tsx ./scripts/pre-publish.ts && tsc --declaration ./src/index.ts --emitDeclarationOnly --outDir ./dist --noCheck",
     "prepublishOnly": "tsx ./scripts/pre-publish.ts && tsc --declaration ./src/index.ts --emitDeclarationOnly --outDir ./dist --noCheck"
   },
   "exports": {
