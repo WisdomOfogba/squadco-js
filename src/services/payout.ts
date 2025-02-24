@@ -58,6 +58,7 @@ export class SquadPayout {
         return response
     }
 
+    /** This API allows you re-query the status of a transfer made to know if it was successful, failed, reversed or pending. */
     async requery(transaction_ref: string) {
         const response = await callWithHeader<RequeryReturn>(this.options.secretKey, 'payout/requery', {
             method: "POST",
