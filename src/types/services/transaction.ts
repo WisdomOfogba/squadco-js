@@ -249,3 +249,63 @@ export type RefundReturn = SharedSquadReturn<{
     refund_status: number,
     refund_reference: string
 }>
+
+export type CreateLinkOptions = {
+    /** Title/Name of the Payment Link */
+    name: string,
+    /** Unique string that identifies each payment Link (cannot exceed 255 characters)\
+     * 
+     *  This should be cryptographically computed to ensure uniqueness
+     */
+    hash: string,
+    /** Value can be 0 or 1.\
+        __1 - Active,\
+        0 - Inactive__ */
+    link_status: 0 | 1,
+    /** E.g: 2021-04-26T11:22:08.587Z */
+    expire_by: string,
+    /** Must have at least one field */
+    amounts: {
+        /** Amount must be in the lowest currency. (kobo for Naira transactions and cent for Dollar transaction) __i.e 40000 = 400NGN__ */
+        amount: number,
+        /** USD or NGN (USD - US Dollars & NGN - Nigerian Naira) */
+        currency_id: "NGN" | "USD"
+    }[],
+    /** This describes what the payment link does */
+    description: string,
+    /** URL to be redirected to after payment. When this is not provided, the default redirect URL set on your dashboard will be used */
+    redirect_link?: string,
+    /** Message to be displayed to the customer after payment via the link */
+    return_msg?: string
+}
+
+export type CreateLinkReturn = SharedSquadReturn<{
+    name: string,
+    link_type: "otp",
+    hash: string,
+    description: string,
+    currencies: unknown,
+    redirect_link: string,
+    return_msg: string,
+    support_email: string | null,
+    support_phone: number | null,
+    terms_condition: unknown,
+    return_policy: unknown,
+    pickup_location: unknown,
+    merchant_id: string,
+    /** Value can be 0 or 1.\
+       __1 - Active,\
+       0 - Inactive__ */
+    link_status: 0 | 1,
+    extra: unknown,
+    /** E.g "2022-08-08T09:24:41.269Z" */
+    expire_by: string,
+    /** E.g "2022-08-08T09:24:41.269Z" */
+    createdAt: string,
+    /** E.g "2022-08-08T09:24:41.269Z" */
+    updatedAt: string,
+    archivedAt: string | null,
+    image_id: string | null,
+    image: string | null,
+    amounts: CreateLinkOptions['amounts']
+}>

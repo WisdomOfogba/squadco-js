@@ -3,6 +3,8 @@ import { FetchOptions, ofetch } from "ofetch";
 import { PossibleWebHooks } from "./types";
 
 const apiUrl = process.env.NODE_ENV === 'production' ? 'https://api-d.squadco.com' : 'https://sandbox-api-d.squadco.com';
+export const paymentLinkUrl = process.env.NODE_ENV === 'production' ? 'https://pay.squadco.com/' : 'https://sandbox-pay.squadco.com/'
+
 
 export const squadFetch = ofetch.create({
     baseURL: apiUrl,

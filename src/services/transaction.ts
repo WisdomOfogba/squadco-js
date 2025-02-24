@@ -1,8 +1,8 @@
 import { destr } from 'destr'
 
 import { SquadOptions } from "../types/services/pos";
-import { CardChargeOptions, CardChargeReturn, GetAllTransactionsOption, GetAllTransactionsReturn, InitializeDebitPayOptions, InitializeDebitPayReturn, InitializePaymentError, InitializePaymentOptions, InitializePaymentReturn, InitializePaymentSuccess, RefundOptions, RefundReturn, ValidatePaymentOptions, ValidatePaymentReturn, VerifyTransactionRefurn } from "../types/services/transaction";
-import { callWithHeader, checkSquadForError, formatDate, SquadError } from "../utils";
+import { CardChargeOptions, CardChargeReturn, CreateLinkOptions, CreateLinkReturn, GetAllTransactionsOption, GetAllTransactionsReturn, InitializeDebitPayOptions, InitializeDebitPayReturn, InitializePaymentError, InitializePaymentOptions, InitializePaymentReturn, InitializePaymentSuccess, RefundOptions, RefundReturn, ValidatePaymentOptions, ValidatePaymentReturn, VerifyTransactionRefurn } from "../types/services/transaction";
+import { callWithHeader, checkSquadForError, formatDate, paymentLinkUrl, SquadError } from "../utils";
 
 export class SquadTransaction {
     options: SquadOptions
@@ -21,6 +21,44 @@ export class SquadTransaction {
         checkSquadForError(response)
 
         return response
+    }
+
+    /** THis method creates a simple payment link
+     *   
+     *  ```ts
+     *      const a = new SquadTransaction({ publicKey: '', secretKey: '' }) 
+            const b = await a.createPaymentLink({
+                "name": "Demo Otp Link",
+                "hash": "mypaymentlink",
+                "link_status": 1,
+                "expire_by": "2023-04-26T11:22:08.587Z",
+                "amounts": [
+                    {
+                        "amount": 4000,
+                     "currency_id": "NGN"
+                 }
+                ],
+                "description": "My description",
+                "redirect_link": "https://fjfhgfd.com",
+                "return_msg": "Successful"
+            })
+
+            const link =  b.data.payment_link
+
+     *  ```
+     */
+    async createPaymentLink(options: CreateLinkOptions) {
+        const response = await callWithHeader<CreateLinkReturn>(this.options.secretKey, 'payment_link/otp', {
+            method: "POST",
+            body: options,
+        })
+
+        checkSquadForError(response)
+
+        // @ts-ignore
+        response.data.payment_link = new URL(response.data.hash, paymentLinkUrl).href
+
+        return response as CreateLinkReturn & { data: { payment_link: string } }
     }
 
     /** This endpoint allows you to query all transactions and filter using multiple parameters like transaction ref, start and end dates, amount, etc
