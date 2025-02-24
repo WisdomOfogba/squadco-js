@@ -2,6 +2,7 @@ import { fileURLToPath } from "node:url";
 import { build } from 'esbuild';
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
+import { ofetch } from "ofetch";
 
 const base = (str: string) => fileURLToPath(new URL(str, import.meta.url));
 // tsc --declaration index.ts --emitDeclarationOnly --outDir ./dist
@@ -15,6 +16,7 @@ await Promise.allSettled([
         minify: true,
         bundle: true,
         platform: 'node',
+        external: ['ofetch', 'destr']
     }),
     build({
         entryPoints: [base("../src/index.ts")],
@@ -23,13 +25,13 @@ await Promise.allSettled([
         minify: true,
         bundle: true,
         platform: 'node',
+        external: ['ofetch', 'destr']
     }),
     build({
         entryPoints: [base("../src/nip.ts")],
         outfile: base('../dist/esm/nip.mjs'),
         format: "esm",
         minify: true,
-        bundle: true,
         platform: 'node',
     }),
     build({
@@ -37,7 +39,6 @@ await Promise.allSettled([
         outfile: base('../dist/cjs/nip.cjs'),
         format: "cjs",
         minify: true,
-        bundle: true,
         platform: 'node',
     }),
 ])
