@@ -52,3 +52,15 @@ export type RequeryReturn = SharedSquadReturn<{
     account_name: string,
     destination_institution_name: string
 }>
+
+export type GetPayoutsReturn = SharedSquadReturn<({
+    account_number_credited: string,
+    amount_debited: string,
+    total_amount_debited: string,
+    success: boolean,
+    recipient: string,
+    bank_code: string,
+    transaction_reference: string,
+    transaction_status: string,
+    switch_transaction: unknown
+})[]>

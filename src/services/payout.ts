@@ -25,6 +25,17 @@ export class SquadPayout {
         return response
     }
 
+    /** This method gets the details of all transfers you have done from your Squad Wallet  */
+    async getAll(options: { page: number, perPage: number, dir?: "ASC" | "DESC" }) {
+        const response = await callWithHeader<PayoutTransferReturn>(this.options.secretKey, 'payout/list', {
+            query: options
+        })
+
+        checkSquadForError(response)
+
+        return response
+    }
+
     /** 
      * This method allows you to transfer funds from your Squad Wallet to the account you have looked up.
        Please be informed that we will not be held liable for mistake in transferring to a wrong account or an account that wasn't looked up.
