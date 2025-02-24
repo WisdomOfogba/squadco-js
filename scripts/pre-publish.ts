@@ -23,5 +23,21 @@ await Promise.allSettled([
         minify: true,
         bundle: true,
         platform: 'node',
-    })
+    }),
+    build({
+        entryPoints: [base("../src/nip.ts")],
+        outfile: base('../dist/esm/nip.mjs'),
+        format: "esm",
+        minify: true,
+        bundle: true,
+        platform: 'node',
+    }),
+    build({
+        entryPoints: [base("../src/nip.ts")],
+        outfile: base('../dist/cjs/nip.cjs'),
+        format: "cjs",
+        minify: true,
+        bundle: true,
+        platform: 'node',
+    }),
 ])
