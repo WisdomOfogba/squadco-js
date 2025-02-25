@@ -1,4 +1,4 @@
-import { SquadOptions } from "../types/pos";
+import { SquadOptions } from "../types/services/pos";
 
 export class SquadMerchant {
     options: SquadOptions

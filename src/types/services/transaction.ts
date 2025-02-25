@@ -1,4 +1,4 @@
-import { SharedSquadReturn } from "./shared"
+import { SharedSquadReturn } from ".."
 
 export type InitializePaymentOptions = {
     /** Customer's email address. */
@@ -60,7 +60,7 @@ export type InitializePaymentSuccess = SharedSquadReturn<{
         type: number,
         plan_code: unknown,
         customer_name: string | null
-    },
+    } | null,
     is_recurring: boolean,
     plan_code: unknown,
     callback_url: string,
@@ -208,4 +208,104 @@ export type ValidatePaymentReturn = SharedSquadReturn<{
     gateway_ref: string,
     merchant_amount: number,
     auth_model: "ValidateTOKEN" | "ValidateOTP",
+}>
+
+export type VerifyTransactionRefurn = SharedSquadReturn<{
+    transaction_amount: number,
+    transaction_ref: string,
+    email: string,
+    transaction_status: "Success" | "failed",
+    /** Usually "NGN" */
+    transaction_currency_id: string,
+    /** E.g "2004-01-21T04:30:20" */
+    created_at: string,
+    transaction_type: string,
+    merchant_name: string,
+    merchant_business_name: string | null,
+    gateway_transaction_ref: string,
+    recurring: unknown,
+    merchant_email: string,
+    plan_code: unknown
+}>
+
+export type RefundOptions = {
+    /** Unique reference that uniquely identifies the medium of payment and can be obtained from  the webhook notification sent to you. */
+    gateway_transaction_ref: string
+    /** Unique reference that identifies a transaction.\
+        Can be obtained from the dashboard or the webhook notification sent to you */
+    transaction_ref: string
+    /** The value of this parameter is either "Full" or "Partial" */
+    refund_type: "Full" | "Partial"
+    reason_for_refund: string
+    /** Refund amount is in kobo or cent.
+     * 
+     * __This is only required for "Partial" refunds__ */
+    refund_amount?: string
+}
+
+
+export type RefundReturn = SharedSquadReturn<{
+    gateway_refund_status: string,
+    refund_status: number,
+    refund_reference: string
+}>
+
+export type CreateLinkOptions = {
+    /** Title/Name of the Payment Link */
+    name: string,
+    /** Unique string that identifies each payment Link (cannot exceed 255 characters)\
+     * 
+     *  This should be cryptographically computed to ensure uniqueness
+     */
+    hash: string,
+    /** Value can be 0 or 1.\
+        __1 - Active,\
+        0 - Inactive__ */
+    link_status: 0 | 1,
+    /** E.g: 2021-04-26T11:22:08.587Z */
+    expire_by: string,
+    /** Must have at least one field */
+    amounts: {
+        /** Amount must be in the lowest currency. (kobo for Naira transactions and cent for Dollar transaction) __i.e 40000 = 400NGN__ */
+        amount: number,
+        /** USD or NGN (USD - US Dollars & NGN - Nigerian Naira) */
+        currency_id: "NGN" | "USD"
+    }[],
+    /** This describes what the payment link does */
+    description: string,
+    /** URL to be redirected to after payment. When this is not provided, the default redirect URL set on your dashboard will be used */
+    redirect_link?: string,
+    /** Message to be displayed to the customer after payment via the link */
+    return_msg?: string
+}
+
+export type CreateLinkReturn = SharedSquadReturn<{
+    name: string,
+    link_type: "otp",
+    hash: string,
+    description: string,
+    currencies: unknown,
+    redirect_link: string,
+    return_msg: string,
+    support_email: string | null,
+    support_phone: number | null,
+    terms_condition: unknown,
+    return_policy: unknown,
+    pickup_location: unknown,
+    merchant_id: string,
+    /** Value can be 0 or 1.\
+       __1 - Active,\
+       0 - Inactive__ */
+    link_status: 0 | 1,
+    extra: unknown,
+    /** E.g "2022-08-08T09:24:41.269Z" */
+    expire_by: string,
+    /** E.g "2022-08-08T09:24:41.269Z" */
+    createdAt: string,
+    /** E.g "2022-08-08T09:24:41.269Z" */
+    updatedAt: string,
+    archivedAt: string | null,
+    image_id: string | null,
+    image: string | null,
+    amounts: CreateLinkOptions['amounts']
 }>

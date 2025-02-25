@@ -27,13 +27,19 @@
   "scripts": {
     "start": "tsx ./src/index.ts",
     "test": "vitest",
-    "build": "cross-env NODE_ENV=production tsx ./scripts/pre-publish.ts && tsc --declaration ./src/index.ts --emitDeclarationOnly --outDir ./dist --noCheck",
+    "build": "tsx ./scripts/pre-publish.ts && tsc --declaration ./src/index.ts --emitDeclarationOnly --outDir ./dist --noCheck",
     "prepublishOnly": "tsx ./scripts/pre-publish.ts && tsc --declaration ./src/index.ts --emitDeclarationOnly --outDir ./dist --noCheck"
   },
   "exports": {
-    "types": "./dist/index.d.ts",
-    "import": "./dist/esm/index.mjs",
-    "require": "./dist/cjs/index.cjs"
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/esm/index.mjs",
+      "require": "./dist/cjs/index.cjs"
+    },
+    "./nip": {
+      "import": "./dist/esm/nip.mjs",
+      "require": "./dist/cjs/nip.cjs"
+    }
   },
   "files": [
     "./dist"

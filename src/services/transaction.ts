@@ -1,8 +1,8 @@
 import { destr } from 'destr'
 
-import { SquadOptions } from "../types/pos";
-import { CardChargeOptions, CardChargeReturn, GetAllTransactionsOption, GetAllTransactionsReturn, InitializeDebitPayOptions, InitializeDebitPayReturn, InitializePaymentError, InitializePaymentOptions, InitializePaymentReturn, InitializePaymentSuccess, ValidatePaymentOptions, ValidatePaymentReturn } from "../types/transaction";
-import { callWithHeader, checkSquadForError, formatDate, SquadError } from "../utils";
+import { SquadOptions } from "../types/services/pos";
+import { CardChargeOptions, CardChargeReturn, CreateLinkOptions, CreateLinkReturn, GetAllTransactionsOption, GetAllTransactionsReturn, InitializeDebitPayOptions, InitializeDebitPayReturn, InitializePaymentError, InitializePaymentOptions, InitializePaymentReturn, InitializePaymentSuccess, RefundOptions, RefundReturn, ValidatePaymentOptions, ValidatePaymentReturn, VerifyTransactionRefurn } from "../types/services/transaction";
+import { callWithHeader, checkSquadForError, formatDate, paymentLinkUrl, SquadError } from "../utils";
 
 export class SquadTransaction {
     options: SquadOptions
@@ -21,6 +21,44 @@ export class SquadTransaction {
         checkSquadForError(response)
 
         return response
+    }
+
+    /** THis method creates a simple payment link
+     *   
+     *  ```ts
+     *      const a = new SquadTransaction({ publicKey: '', secretKey: '' }) 
+            const b = await a.createPaymentLink({
+                "name": "Demo Otp Link",
+                "hash": "mypaymentlink",
+                "link_status": 1,
+                "expire_by": "2023-04-26T11:22:08.587Z",
+                "amounts": [
+                    {
+                        "amount": 4000,
+                     "currency_id": "NGN"
+                 }
+                ],
+                "description": "My description",
+                "redirect_link": "https://fjfhgfd.com",
+                "return_msg": "Successful"
+            })
+
+            const link =  b.data.payment_link
+
+     *  ```
+     */
+    async createPaymentLink(options: CreateLinkOptions) {
+        const response = await callWithHeader<CreateLinkReturn>(this.options.secretKey, 'payment_link/otp', {
+            method: "POST",
+            body: options,
+        })
+
+        checkSquadForError(response)
+
+        // @ts-ignore
+        response.data.payment_link = new URL(response.data.hash, paymentLinkUrl).href
+
+        return response as CreateLinkReturn & { data: { payment_link: string } }
     }
 
     /** This endpoint allows you to query all transactions and filter using multiple parameters like transaction ref, start and end dates, amount, etc
@@ -44,7 +82,36 @@ export class SquadTransaction {
     }
 
     /** This endpoint allows you to initiate the direct debit of a GTBank account by passing the account number.\
-     *  After initiating the request using this endpoint you are then to call the validate endpoint to complete the transaction. */
+     *  After initiating the request using this endpoint you are then to call the validate endpoint to complete the transaction.\
+     *  
+     *  **Below is quick reference for bank codes supported**
+     * 
+     * | BANK                     | BANK CODE |
+     * | :---                            |      ---: |
+     * | Access (Diamond)                | 063 |
+    *  | Access                          | 044 |
+    *  | Ecobank                         | 050 |
+    *  | FCMB                            | 214 |
+    *  | Fidelity Bank                   | 070 |
+    *  | First Bank                      | 011 |
+    *  | Guaranty Trust Bank             | 058 |
+    *  | Heritage Bank                   | 030 |
+    *  | Keystone Bank                   | 082 |
+    *  | Rubies (Highstreet) MFB         | 125 |
+    *  | Stanbic Bank                    | 221 |
+    *  | Sterling Bank                   | 232 |
+    *  | UBA                             | 033 |
+    *  | Union Bank                      | 032 |
+    *  | Unity Bank                      | 215 |
+    *  | VFD Bank                        | 566 |
+    *  | Wema Bank                       | 035 |
+    *  | Zenith Bank                     | 057 |
+    *  | Globus bank                     | 00103 |
+    *  | Premium Trust Bank              | 105 |
+    *  | LOTUS bank                      | 303 |
+    *  | Optimum Trust Bank              | 107 |
+    *  | Kuda MFB                        | 50211 |
+     */
     async initializeDebitPay(options: InitializeDebitPayOptions) {
         const response = await callWithHeader<InitializeDebitPayReturn>(this.options.secretKey, 'transaction/initiate/process-payment', {
             method: "POST",
@@ -72,6 +139,22 @@ export class SquadTransaction {
         return result
     }
 
+    /**
+     * Initiate refund process on a __successful__ transaction.
+     * 
+     * Read more: https://squadinc.gitbook.io/squad-api-documentation/refund-api
+     */
+    async refund(options: RefundOptions) {
+        const response = await callWithHeader<RefundReturn>(this.options.secretKey, 'transaction/refund', {
+            method: "POST",
+            body: options,
+        })
+
+        checkSquadForError(response)
+
+        return response
+    }
+
     /** Once a payment is initiated using the Direct Bank API, the transaction must be authenticated. This is done using this endpoint to receive details from the user.\
 
       __For the auth_model (The return for the initiaizeDebitPay SquadTransaction class): The value could be either ValidateTOKEN or ValidateOTP.\
@@ -83,6 +166,17 @@ export class SquadTransaction {
             method: "POST",
             body: options,
         })
+
+        checkSquadForError(response)
+
+        return response
+    }
+
+    /** This method allows you to query the status of a particular transaction using the unique transaction reference attached to the transaction. 
+     *  @param reference Unique transaction reference that identifies each transaction
+    */
+    async verifyTransaction(reference: string) {
+        const response = await callWithHeader<VerifyTransactionRefurn>(this.options.secretKey, `transaction/verify/${reference}`)
 
         checkSquadForError(response)
 
