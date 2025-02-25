@@ -1,4 +1,4 @@
-import { CreateTerminalOptions, CreateTerminalReturn, GetTerminalsOptions, GetTerminalsReturn, POSTransactionOptions, POSTransactionReturn, SquadOptions } from "../types/pos";
+import { CreateTerminalOptions, CreateTerminalReturn, GetTerminalsOptions, GetTerminalsReturn, POSTransactionOptions, POSTransactionReturn, SquadOptions } from "../types/services/pos";
 import { callWithHeader, checkSquadForError, formatDate } from "../utils";
 
 export class SquadPos {

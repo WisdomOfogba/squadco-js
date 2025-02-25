@@ -1,4 +1,4 @@
-import { SharedSquadReturn } from "./shared"
+import { SharedSquadReturn } from ".."
 
 type POSTransactionsRow = {
     id: string,
